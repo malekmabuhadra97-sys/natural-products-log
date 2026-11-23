@@ -74,7 +74,7 @@ const $=id=>document.getElementById(id);let all=[],flt='all',KEY='';
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Africa/Tripoli',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 const fmt=s=>{const[a,b,c]=s.split('-');return c+'/'+b+'/'+a};
 const sum=(rs,k)=>rs.reduce((s,r)=>s+((r.q&&r.q[k])||0),0);
-$('hd').innerHTML='<tr><th>النوع</th><th>التاريخ</th>'+P.map(p=>'<th>'+p[1]+'</th>').join('')+'</tr>';
+$('hd').innerHTML='<tr><th>النوع</th><th>التاريخ</th>'+P.map(p=>'<th>'+p[1]+'</th>').join('')+'<th>الصور</th></tr>';
 const inRange=r=>(!$('d1').value||r.date>=$('d1').value)&&(!$('d2').value||r.date<=$('d2').value);
 function drawChart(){
  const days=[];const base=new Date(today()+'T12:00:00Z');
@@ -101,8 +101,8 @@ function render(){
  drawChart();
  const tb=$('rows');tb.innerHTML='';
  list.forEach(r=>{const t=T[r.type];const tr=document.createElement('tr');tr.className='r';tr.style.setProperty('--c',t.c);
-  [t.n,fmt(r.date),...P.map(([k])=>(r.q&&r.q[k])||0)].forEach((v,i)=>{const td=document.createElement('td');td.textContent=v;if(i===0)td.className='ty';tr.appendChild(td)});tb.appendChild(tr)});
- $('ft').innerHTML=list.length?'<tr><td colspan="2">الإجمالي</td>'+P.map(([k])=>'<td>'+sum(list,k)+'</td>').join('')+'</tr>':'';
+  [t.n,fmt(r.date),...P.map(([k])=>(r.q&&r.q[k])||0)].forEach((v,i)=>{const td=document.createElement('td');td.textContent=v;if(i===0)td.className='ty';tr.appendChild(td)});{const td=document.createElement('td');if(r.photos){const l=document.createElement('a');l.href=r.photos;l.target='_blank';l.rel='noopener';l.textContent='عرض الصور';l.style.fontWeight='700';td.appendChild(l)}tr.appendChild(td)}tb.appendChild(tr)});
+ $('ft').innerHTML=list.length?'<tr><td colspan="2">الإجمالي</td>'+P.map(([k])=>'<td>'+sum(list,k)+'</td>').join('')+'<td></td></tr>':'';
  $('empty').hidden=list.length>0;$('empty').textContent=all.length?'ما فيش حركات من هذا النوع.':'ما فيش حركات بعد.';
 }
 async function load(){
