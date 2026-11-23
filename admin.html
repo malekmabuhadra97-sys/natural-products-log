@@ -1,0 +1,123 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><title>لوحة إدارة حركة المنتجات</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap">
+<style>
+/* Layout: one narrow column — entry card on top, totals strip, then the colour-coded log */
+:root{
+--bg:#f4f5f7;--card:#fff;--fg:#17191c;--mut:#6a717a;--line:#e1e4e8;--accent:#17191c;--accent-fg:#fff;
+--red:#c62828;--green:#2e7d32;--blue:#1565c0;--tint:12%;--font:'Cairo',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111316;--card:#1a1d21;--fg:#eceef1;--mut:#9aa1ab;--line:#2c3036;--accent:#eceef1;--accent-fg:#111316;--red:#ef5350;--green:#66bb6a;--blue:#64b5f6;--tint:20%;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111316;--card:#1a1d21;--fg:#eceef1;--mut:#9aa1ab;--line:#2c3036;--accent:#eceef1;--accent-fg:#111316;--red:#ef5350;--green:#66bb6a;--blue:#64b5f6;--tint:20%;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);direction:rtl;font-size:16px;
+padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:26px;font-weight:900;text-wrap:balance}
+.sub{margin:2px 0 0;color:var(--mut);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.full{grid-column:1/-1}.pg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;font-size:13px;font-weight:600;color:var(--mut);margin-bottom:6px}
+input,select,button{font-family:inherit;font-size:16px}
+input,select{width:100%;min-width:0;box-sizing:border-box;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg)}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offset:1px}
+select{border-right-width:8px;border-right-color:var(--sel,var(--line))}
+.go{width:100%;padding:13px;border:0;border-radius:10px;background:var(--accent);color:var(--accent-fg);font-weight:700;cursor:pointer}
+.go:disabled{opacity:.5}
+.tot{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.t{border-radius:12px;padding:12px;background:color-mix(in srgb,var(--c) var(--tint),var(--card));border:1px solid color-mix(in srgb,var(--c) 35%,var(--line));min-width:0}
+.t b{display:block;font-size:14px;color:var(--c)}
+.t span{display:block;font-size:13px;color:var(--mut);margin-top:6px;font-variant-numeric:tabular-nums}
+.t strong{color:var(--fg);font-size:18px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:6px 12px;border-radius:99px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer;font-weight:600;font-size:14px}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.sec{background:transparent;border:1.5px solid var(--line);color:var(--fg);border-radius:10px;padding:7px 14px;cursor:pointer;font-weight:600;font-size:14px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-variant-numeric:tabular-nums}
+th{font-size:13px;color:var(--mut);text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);font-weight:600}
+td{padding:11px 12px;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}tfoot td{font-weight:900;border-top:2px solid var(--line);background:var(--bg)}
+tr.r td{background:color-mix(in srgb,var(--c) var(--tint),var(--card))}
+tr.r td:first-child{box-shadow:inset -6px 0 0 var(--c)}
+.ty{font-weight:700;color:var(--c)}
+.x{background:none;border:0;color:var(--mut);cursor:pointer;font-size:18px;padding:2px 8px}
+.empty{padding:28px 16px;text-align:center;color:var(--mut)}
+.adm{display:flex;flex-direction:column;gap:16px}
+.badge{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--accent);color:var(--accent-fg);margin-inline-start:8px;vertical-align:middle}
+.flt{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+h2{margin:0 0 10px;font-size:18px;font-weight:700}
+.cht{width:100%;height:auto;display:block}
+.cht text{fill:var(--mut);font-family:var(--font);font-size:11px}
+.lg{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--mut);margin-top:8px}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px;vertical-align:-1px}
+.msg{font-size:14px;color:var(--mut);min-height:20px}
+.err{color:var(--red)}
+@media (max-width:420px){h1{font-size:22px}.t strong{font-size:16px}}
+
+html{background:var(--bg)}body{margin:0}[hidden]{display:none!important}#mx{min-width:0!important}#mx th,#mx td{padding:9px 8px}</style></head><body><div class="wrap">
+ <header><h1>لوحة إدارة حركة المنتجات</h1><p class="sub" id="upd">أدخل مفتاح المدير لعرض السجل.</p></header>
+ <form class="card" id="gate" style="display:flex;gap:10px"><input id="key" type="password" placeholder="مفتاح المدير" autocomplete="off"><button class="go" style="width:auto;padding:0 22px" type="submit">دخول</button></form>
+ <div class="adm" id="adm" hidden>
+ <div class="card flt"><div><label for="d1">من تاريخ</label><input id="d1" type="date"></div><div><label for="d2">إلى تاريخ</label><input id="d2" type="date"></div></div>
+ <section class="tot" id="tot" aria-label="الإجماليات"></section>
+ <div class="card"><h2>المنتجات حسب نوع الحركة</h2><div class="tw" style="border:0"><table id="mx"></table></div></div>
+ <div class="card"><h2>آخر 14 يوم</h2><svg class="cht" id="cht" viewBox="0 0 700 220" role="img" aria-label="إجمالي القطع اليومي حسب نوع الحركة"></svg><div class="lg" id="lg"></div></div>
+ <div class="bar"><div class="chips" id="chips"></div><div style="display:flex;gap:8px"><button class="sec" id="ref" type="button">تحديث</button><button class="sec" id="exp" type="button">تنزيل إكسل</button></div></div>
+ <div class="tw"><table><thead id="hd"></thead><tbody id="rows"></tbody><tfoot id="ft"></tfoot></table><div class="empty" id="empty" hidden></div></div>
+ </div>
+</div>
+<script src="config.js"></script>
+<script>
+const T={return:{n:'راجع التوصيل',c:'var(--red)',x:'#c62828',bg:'#f9d9d9',h:'#c62828'},send:{n:'إرسال التوصيل',c:'var(--green)',x:'#2e7d32',bg:'#d8ecd9',h:'#2e7d32'},recv:{n:'استلام بضاعة',c:'var(--blue)',x:'#1565c0',bg:'#d6e6f8',h:'#1565c0'}};
+const P=[['tasmeen','العسل التسمين'],['royal','العسل الملكي'],['sultan','عسل السلطان'],['women','عسل التسمين النسائي'],['pollen','حبوب اللقاح']];
+const $=id=>document.getElementById(id);let all=[],flt='all',KEY='';
+const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Africa/Tripoli',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+const fmt=s=>{const[a,b,c]=s.split('-');return c+'/'+b+'/'+a};
+const sum=(rs,k)=>rs.reduce((s,r)=>s+((r.q&&r.q[k])||0),0);
+$('hd').innerHTML='<tr><th>النوع</th><th>التاريخ</th>'+P.map(p=>'<th>'+p[1]+'</th>').join('')+'</tr>';
+const inRange=r=>(!$('d1').value||r.date>=$('d1').value)&&(!$('d2').value||r.date<=$('d2').value);
+function drawChart(){
+ const days=[];const base=new Date(today()+'T12:00:00Z');
+ for(let i=13;i>=0;i--){days.push(new Date(base.getTime()-i*864e5).toISOString().slice(0,10))}
+ const tot=d=>Object.keys(T).map(k=>all.filter(r=>r.date===d&&r.type===k).reduce((s,r)=>s+P.reduce((a,[p])=>a+((r.q&&r.q[p])||0),0),0));
+ const rows=days.map(tot);const mx=Math.max(10,...rows.map(a=>a.reduce((x,y)=>x+y,0)));
+ const W=700,H=220,pl=36,pb=26,pt=10,bw=(W-pl)/14;let g='';
+ [0,.5,1].forEach(f=>{const y=pt+(H-pb-pt)*(1-f);g+='<line x1="'+pl+'" x2="'+W+'" y1="'+y+'" y2="'+y+'" stroke="currentColor" stroke-opacity=".12"/><text x="'+(pl-6)+'" y="'+(y+4)+'" text-anchor="end">'+Math.round(mx*f)+'</text>'});
+ rows.forEach((a,i)=>{let y=H-pb;const x=pl+i*bw+bw*.18;Object.keys(T).forEach((k,j)=>{const h=(a[j]/mx)*(H-pb-pt);if(h>0){y-=h;g+='<rect x="'+x+'" y="'+y+'" width="'+bw*.64+'" height="'+h+'" rx="2" fill="'+T[k].h+'"/>'}});
+  g+='<text x="'+(x+bw*.32)+'" y="'+(H-8)+'" text-anchor="middle">'+days[i].slice(8)+'/'+days[i].slice(5,7)+'</text>'});
+ $('cht').innerHTML=g;
+ $('lg').innerHTML=Object.entries(T).map(([k,v])=>'<span><i style="background:'+v.h+'"></i>'+v.n+'</span>').join('');
+}
+function render(){
+ const rng=all.filter(inRange);const list=rng.filter(r=>flt==='all'||r.type===flt);
+ $('chips').innerHTML='';
+ [['all','الكل'],...Object.entries(T).map(([k,v])=>[k,v.n])].forEach(([k,n])=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=n;b.setAttribute('aria-pressed',flt===k);b.onclick=()=>{flt=k;render()};$('chips').appendChild(b)});
+ $('tot').innerHTML='';
+ Object.entries(T).forEach(([k,v])=>{const rs=rng.filter(r=>r.type===k);const tt=P.reduce((s,[p])=>s+sum(rs,p),0);
+  const d=document.createElement('div');d.className='t';d.style.setProperty('--c',v.c);
+  d.innerHTML='<b></b><span>إجمالي القطع: <strong></strong></span><span class="n"></span>';
+  d.querySelector('b').textContent=v.n;d.querySelector('strong').textContent=tt;d.querySelector('.n').textContent=rs.length+' حركة';$('tot').appendChild(d)});
+ $('mx').innerHTML='<thead><tr><th>المنتج</th>'+Object.values(T).map(v=>'<th style="color:'+v.c+'">'+v.n+'</th>').join('')+'<th>الإجمالي</th></tr></thead><tbody>'+P.map(([k,n])=>{const c=Object.keys(T).map(t=>sum(rng.filter(r=>r.type===t),k));return '<tr><td>'+n+'</td>'+c.map(v=>'<td>'+v+'</td>').join('')+'<td><b>'+c.reduce((a,b)=>a+b,0)+'</b></td></tr>'}).join('')+'</tbody>';
+ drawChart();
+ const tb=$('rows');tb.innerHTML='';
+ list.forEach(r=>{const t=T[r.type];const tr=document.createElement('tr');tr.className='r';tr.style.setProperty('--c',t.c);
+  [t.n,fmt(r.date),...P.map(([k])=>(r.q&&r.q[k])||0)].forEach((v,i)=>{const td=document.createElement('td');td.textContent=v;if(i===0)td.className='ty';tr.appendChild(td)});tb.appendChild(tr)});
+ $('ft').innerHTML=list.length?'<tr><td colspan="2">الإجمالي</td>'+P.map(([k])=>'<td>'+sum(list,k)+'</td>').join('')+'</tr>':'';
+ $('empty').hidden=list.length>0;$('empty').textContent=all.length?'ما فيش حركات من هذا النوع.':'ما فيش حركات بعد.';
+}
+async function load(){
+ const u=window.APP_URL+(window.APP_URL.indexOf('?')>-1?'&':'?')+'action=list&key='+encodeURIComponent(KEY);
+ const r=await fetch(u);const j=await r.json();if(!j.ok)throw new Error(j.error||'x');
+ all=j.rows.sort((a,b)=>a.date<b.date?1:-1);$('upd').textContent='آخر تحديث: '+new Date().toLocaleTimeString('en-GB',{timeZone:'Africa/Tripoli'})+' (توقيت طرابلس)';render()}
+$('gate').onsubmit=async e=>{e.preventDefault();KEY=$('key').value.trim();
+ if(!window.APP_URL||window.APP_URL.indexOf('PASTE')>-1){$('upd').textContent='رابط الخادم غير مضبوط في config.js.';return}
+ $('upd').textContent='جاري التحميل…';
+ try{await load();$('gate').hidden=true;$('adm').hidden=false}catch(err){$('upd').textContent='المفتاح غير صحيح أو تعذّر الاتصال.'}};
+$('ref').onclick=()=>load().catch(()=>{$('upd').textContent='تعذّر التحديث.'});
+$('d1').onchange=$('d2').onchange=render;
+$('exp').onclick=()=>{
+ let h='<html dir="rtl"><head><meta charset="utf-8"></head><body><table border="1" style="direction:rtl;font-family:Arial"><tr style="background:#17191c;color:#fff;font-weight:bold"><td>نوع الحركة</td><td>التاريخ</td>'+P.map(p=>'<td>'+p[1]+'</td>').join('')+'</tr>';
+ all.slice().sort((a,b)=>a.date<b.date?-1:1).forEach(r=>{const t=T[r.type];h+='<tr style="background:'+t.bg+';color:'+t.x+'"><td>'+t.n+'</td><td>'+fmt(r.date)+'</td>'+P.map(([k])=>'<td>'+((r.q&&r.q[k])||0)+'</td>').join('')+'</tr>'});
+ h+='</table></body></html>';
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+h],{type:'application/vnd.ms-excel'}));a.download='حركة_المنتجات_'+today()+'.xls';a.click();URL.revokeObjectURL(a.href)};
+</script></body></html>

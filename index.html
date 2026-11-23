@@ -1,0 +1,89 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><title>إضافة حركة منتجات</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap">
+<style>
+/* Layout: one narrow column — entry card on top, totals strip, then the colour-coded log */
+:root{
+--bg:#f4f5f7;--card:#fff;--fg:#17191c;--mut:#6a717a;--line:#e1e4e8;--accent:#17191c;--accent-fg:#fff;
+--red:#c62828;--green:#2e7d32;--blue:#1565c0;--tint:12%;--font:'Cairo',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111316;--card:#1a1d21;--fg:#eceef1;--mut:#9aa1ab;--line:#2c3036;--accent:#eceef1;--accent-fg:#111316;--red:#ef5350;--green:#66bb6a;--blue:#64b5f6;--tint:20%;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111316;--card:#1a1d21;--fg:#eceef1;--mut:#9aa1ab;--line:#2c3036;--accent:#eceef1;--accent-fg:#111316;--red:#ef5350;--green:#66bb6a;--blue:#64b5f6;--tint:20%;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);direction:rtl;font-size:16px;
+padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{margin:0;font-size:26px;font-weight:900;text-wrap:balance}
+.sub{margin:2px 0 0;color:var(--mut);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.full{grid-column:1/-1}.pg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;font-size:13px;font-weight:600;color:var(--mut);margin-bottom:6px}
+input,select,button{font-family:inherit;font-size:16px}
+input,select{width:100%;min-width:0;box-sizing:border-box;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg)}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offset:1px}
+select{border-right-width:8px;border-right-color:var(--sel,var(--line))}
+.go{width:100%;padding:13px;border:0;border-radius:10px;background:var(--accent);color:var(--accent-fg);font-weight:700;cursor:pointer}
+.go:disabled{opacity:.5}
+.tot{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.t{border-radius:12px;padding:12px;background:color-mix(in srgb,var(--c) var(--tint),var(--card));border:1px solid color-mix(in srgb,var(--c) 35%,var(--line));min-width:0}
+.t b{display:block;font-size:14px;color:var(--c)}
+.t span{display:block;font-size:13px;color:var(--mut);margin-top:6px;font-variant-numeric:tabular-nums}
+.t strong{color:var(--fg);font-size:18px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:6px 12px;border-radius:99px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer;font-weight:600;font-size:14px}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.sec{background:transparent;border:1.5px solid var(--line);color:var(--fg);border-radius:10px;padding:7px 14px;cursor:pointer;font-weight:600;font-size:14px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-variant-numeric:tabular-nums}
+th{font-size:13px;color:var(--mut);text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);font-weight:600}
+td{padding:11px 12px;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}tfoot td{font-weight:900;border-top:2px solid var(--line);background:var(--bg)}
+tr.r td{background:color-mix(in srgb,var(--c) var(--tint),var(--card))}
+tr.r td:first-child{box-shadow:inset -6px 0 0 var(--c)}
+.ty{font-weight:700;color:var(--c)}
+.x{background:none;border:0;color:var(--mut);cursor:pointer;font-size:18px;padding:2px 8px}
+.empty{padding:28px 16px;text-align:center;color:var(--mut)}
+.adm{display:flex;flex-direction:column;gap:16px}
+.badge{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--accent);color:var(--accent-fg);margin-inline-start:8px;vertical-align:middle}
+.flt{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+h2{margin:0 0 10px;font-size:18px;font-weight:700}
+.cht{width:100%;height:auto;display:block}
+.cht text{fill:var(--mut);font-family:var(--font);font-size:11px}
+.lg{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--mut);margin-top:8px}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px;vertical-align:-1px}
+.msg{font-size:14px;color:var(--mut);min-height:20px}
+.err{color:var(--red)}
+@media (max-width:420px){h1{font-size:22px}.t strong{font-size:16px}}
+
+html{background:var(--bg)}body{margin:0}[hidden]{display:none!important}#mx{min-width:0!important}#mx th,#mx td{padding:9px 8px}</style></head><body><div class="wrap">
+ <header><h1>إضافة حركة منتجات</h1><p class="sub">سجّل كل حركة باليوم. الحركة بعد الحفظ ما تتعدّلش ولا تتحذفش.</p></header>
+ <form class="card grid" id="f" autocomplete="off">
+  <div class="full"><label for="ty">نوع الحركة</label>
+   <select id="ty"><option value="return">راجع التوصيل</option><option value="send">إرسال التوصيل</option><option value="recv">استلام بضاعة</option></select></div>
+  <div class="full"><label for="dt">التاريخ (توقيت طرابلس، تلقائي)</label><input id="dt" type="text" readonly tabindex="-1" style="cursor:default;font-weight:700"></div>
+  <div class="full pg" id="pg"></div>
+  <div class="full"><button class="go" id="save" type="submit">حفظ الحركة</button><div class="msg" id="msg" role="status"></div></div>
+ </form>
+</div>
+<script src="config.js"></script>
+<script>
+const C={return:'var(--red)',send:'var(--green)',recv:'var(--blue)'};
+const P=[['tasmeen','العسل التسمين'],['royal','العسل الملكي'],['sultan','عسل السلطان'],['women','عسل التسمين النسائي'],['pollen','حبوب اللقاح']];
+const $=id=>document.getElementById(id);
+const KEY=new URLSearchParams(location.search).get('k')||'';
+const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Africa/Tripoli',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+const fmt=s=>{const[a,b,c]=s.split('-');return c+'/'+b+'/'+a};
+const showDate=()=>{$('dt').value=fmt(today())};showDate();setInterval(showDate,60000);
+P.forEach(([k,n])=>{const d=document.createElement('div');d.innerHTML='<label></label><input type="number" inputmode="numeric" min="0" step="1" placeholder="0">';d.firstChild.textContent=n+' (العدد)';d.firstChild.htmlFor='p_'+k;d.lastChild.id='p_'+k;$('pg').appendChild(d)});
+const setSel=()=>$('ty').style.setProperty('--sel',C[$('ty').value]);$('ty').onchange=setSel;setSel();
+$('f').onsubmit=async e=>{e.preventDefault();const m=$('msg');m.className='msg';
+ const q={};P.forEach(([k])=>{q[k]=Math.max(0,parseInt($('p_'+k).value||'0',10)||0)});
+ if(!P.some(([k])=>q[k]>0)){m.className='msg err';m.textContent='أدخل عدد منتج واحد على الأقل.';return}
+ if(!KEY||!window.APP_URL||window.APP_URL.indexOf('PASTE')>-1){m.className='msg err';m.textContent='الرابط غير مكتمل. اطلب من المدير الرابط الصحيح.';return}
+ $('save').disabled=true;m.textContent='جاري الحفظ…';
+ try{const r=await fetch(window.APP_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:KEY,type:$('ty').value,q})});
+  const j=await r.json();
+  if(j.ok){P.forEach(([k])=>{$('p_'+k).value=''});m.textContent='تم تسجيل الحركة بتاريخ '+fmt(j.date)+'.'}
+  else{m.className='msg err';m.textContent=j.error==='key'?'المفتاح غير صحيح. اطلب الرابط من المدير.':'ما تحفظتش. تأكد من الأعداد وجرّب مرة ثانية.'}}
+ catch(err){m.className='msg err';m.textContent='تعذّر الاتصال. تأكد من الإنترنت وجرّب مرة ثانية.'}
+ $('save').disabled=false};
+</script></body></html>
